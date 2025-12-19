@@ -1,0 +1,172 @@
+# Microplastic ML Pipeline Configuration
+
+# Data Paths
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  labels_dir: "data/labels"
+  models_dir: "models/saved"
+  checkpoints_dir: "models/checkpoints"
+
+# Data Sources
+ingestion:
+  sources:
+    - name: "zenodo"
+      type: "api"
+      enabled: true
+      base_url: "https://zenodo.org/api"
+      search_queries:
+        - "microplastic"
+        - "FTIR microplastic"
+        - "Raman microplastic"
+    
+    - name: "figshare"
+      type: "api"
+      enabled: true
+      base_url: "https://api.figshare.com/v2"
+      search_queries:
+        - "microplastic"
+    
+    - name: "kaggle"
+      type: "dataset"
+      enabled: true
+      datasets:
+        - "microplastic-images"
+        - "ftir-spectra-microplastics"
+    
+    - name: "pubmed"
+      type: "api"
+      enabled: true
+      base_url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+      search_queries:
+        - "microplastic AND (FTIR OR Raman)"
+        - "microplastic AND (blood OR serum)"
+    
+    - name: "usgs"
+      type: "api"
+      enabled: true
+      base_url: "https://waterservices.usgs.gov/nwis"
+      enabled: false  # Requires API key
+    
+    - name: "eea"
+      type: "api"
+      enabled: true
+      base_url: "https://www.eea.europa.eu/data-and-maps/data"
+      enabled: false  # May require authentication
+  
+  schedule:
+    frequency: "daily"  # daily, hourly, weekly
+    time: "02:00"  # UTC time
+  
+  storage:
+    format: "parquet"  # parquet, hdf5, csv
+    compression: "snappy"
+
+# Preprocessing
+preprocessing:
+  spectra:
+    baseline_correction: true
+    smoothing: true
+    normalization: "minmax"  # minmax, zscore, robust
+    resample_wavelengths: true
+    target_wavelength_range: [400, 4000]  # cm^-1 for FTIR
+    target_resolution: 1.0
+  
+  images:
+    target_size: [512, 512]
+    normalization: "imagenet"  # imagenet, custom, none
+    augmentation:
+      rotation: 15
+      flip_horizontal: true
+      flip_vertical: true
+      brightness: 0.2
+      contrast: 0.2
+  
+  tabular:
+    unit_normalization: true
+    outlier_removal: true
+    outlier_method: "iqr"  # iqr, zscore
+    missing_data_strategy: "median"  # median, mean, drop
+
+# Models
+models:
+  spectra:
+    type: "1d_cnn"
+    architecture:
+      filters: [64, 128, 256]
+      kernel_sizes: [3, 5, 7]
+      dropout: 0.5
+    training:
+      batch_size: 32
+      epochs: 100
+      learning_rate: 0.001
+      early_stopping_patience: 10
+  
+  images:
+    detection:
+      type: "yolov8"
+      model_size: "n"  # n, s, m, l, x
+      confidence_threshold: 0.5
+    classification:
+      type: "efficientnet"
+      model_size: "b0"
+    training:
+      batch_size: 16
+      epochs: 50
+      learning_rate: 0.0001
+  
+  tabular:
+    type: "xgboost"
+    params:
+      n_estimators: 200
+      max_depth: 6
+      learning_rate: 0.1
+      subsample: 0.8
+  
+  multimodal:
+    fusion_type: "late"  # early, late, attention
+    embedding_dim: 128
+    dropout: 0.3
+
+# API
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  log_level: "info"
+  cors_origins: ["*"]
+  
+  endpoints:
+    predict_presence: true
+    predict_type: true
+    predict_concentration: true
+    batch_predict: true
+    health: true
+
+# Monitoring
+monitoring:
+  enabled: true
+  metrics:
+    - "prediction_latency"
+    - "prediction_accuracy"
+    - "data_quality_score"
+    - "model_drift"
+  
+  alerts:
+    anomaly_threshold: 3.0  # standard deviations
+    concentration_spike_threshold: 2.0  # multiplier
+    email_enabled: false
+    webhook_url: null
+
+# Dashboard
+dashboard:
+  port: 8501
+  theme: "light"
+  refresh_interval: 60  # seconds
+
+# Logging
+logging:
+  level: "INFO"
+  file: "logs/pipeline.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+

@@ -1,0 +1,60 @@
+{
+  "samples": [
+    {"location": "Site A", "latitude": 40.7128, "longitude": -74.0060, "concentration": 120, "media_type": "water", "date": "2024-01-01", "presence": 1, "polymer_type": "PE", "temperature": 20.0, "ph": 7.0, "sample_depth": 1.0, "sample_mass": 100.0},
+    {"location": "Site B", "latitude": 34.0522, "longitude": -118.2437, "concentration": 85, "media_type": "water", "date": "2024-01-02", "presence": 1, "polymer_type": "PP", "temperature": 22.0, "ph": 7.2, "sample_depth": 1.5, "sample_mass": 120.0},
+    {"location": "Site C", "latitude": 37.7749, "longitude": -122.4194, "concentration": 150, "media_type": "soil", "date": "2024-01-03", "presence": 1, "polymer_type": "PS", "temperature": 18.0, "ph": 6.8, "sample_depth": 0.5, "sample_mass": 200.0},
+    {"location": "Site D", "latitude": 25.7617, "longitude": -80.1918, "concentration": 95, "media_type": "water", "date": "2024-01-04", "presence": 1, "polymer_type": "PET", "temperature": 25.0, "ph": 7.5, "sample_depth": 2.0, "sample_mass": 150.0},
+    {"location": "Site E", "latitude": 47.6062, "longitude": -122.3321, "concentration": 110, "media_type": "blood", "date": "2024-01-05", "presence": 1, "polymer_type": "PVC", "temperature": 37.0, "ph": 7.4, "sample_depth": 0.0, "sample_mass": 50.0},
+    {"location": "Site F", "latitude": 29.7604, "longitude": -95.3698, "concentration": 135, "media_type": "water", "date": "2024-01-06", "presence": 1, "polymer_type": "PE", "temperature": 23.0, "ph": 7.1, "sample_depth": 1.2, "sample_mass": 110.0},
+    {"location": "Site G", "latitude": 39.9526, "longitude": -75.1652, "concentration": 75, "media_type": "soil", "date": "2024-01-07", "presence": 0, "polymer_type": null, "temperature": 15.0, "ph": 6.5, "sample_depth": 0.8, "sample_mass": 180.0},
+    {"location": "Site H", "latitude": 33.4484, "longitude": -112.0740, "concentration": 200, "media_type": "water", "date": "2024-01-08", "presence": 1, "polymer_type": "PP", "temperature": 28.0, "ph": 7.8, "sample_depth": 1.8, "sample_mass": 130.0},
+    {"location": "Site I", "latitude": 32.7767, "longitude": -96.7970, "concentration": 90, "media_type": "blood", "date": "2024-01-09", "presence": 1, "polymer_type": "PS", "temperature": 36.5, "ph": 7.3, "sample_depth": 0.0, "sample_mass": 45.0},
+    {"location": "Site J", "latitude": 41.8781, "longitude": -87.6298, "concentration": 160, "media_type": "soil", "date": "2024-01-10", "presence": 1, "polymer_type": "PET", "temperature": 12.0, "ph": 6.2, "sample_depth": 0.6, "sample_mass": 220.0}
+  ],
+  "time_series": [
+    {"date": "2024-01-01", "Site A": 120, "Site B": 85, "Site C": 150, "Site D": 95, "Site E": 110, "Site F": 135, "Site G": 75, "Site H": 200, "Site I": 90, "Site J": 160},
+    {"date": "2024-01-02", "Site A": 125, "Site B": 88, "Site C": 155, "Site D": 98, "Site E": 115, "Site F": 140, "Site G": 78, "Site H": 205, "Site I": 92, "Site J": 165},
+    {"date": "2024-01-03", "Site A": 118, "Site B": 82, "Site C": 148, "Site D": 93, "Site E": 108, "Site F": 132, "Site G": 72, "Site H": 198, "Site I": 88, "Site J": 158},
+    {"date": "2024-01-04", "Site A": 122, "Site B": 90, "Site C": 152, "Site D": 96, "Site E": 112, "Site F": 138, "Site G": 76, "Site H": 202, "Site I": 91, "Site J": 162},
+    {"date": "2024-01-05", "Site A": 120, "Site B": 85, "Site C": 150, "Site D": 95, "Site E": 110, "Site F": 135, "Site G": 75, "Site H": 200, "Site I": 90, "Site J": 160}
+  ],
+  "model_metrics": {
+    "tabular_xgboost": {
+      "accuracy": 0.92,
+      "precision": 0.89,
+      "recall": 0.94,
+      "f1_score": 0.91,
+      "confusion_matrix": [[450, 30], [25, 495]],
+      "feature_importance": [
+        {"feature": "sample_depth", "importance": 0.35},
+        {"feature": "latitude", "importance": 0.25},
+        {"feature": "longitude", "importance": 0.20},
+        {"feature": "temperature", "importance": 0.12},
+        {"feature": "ph", "importance": 0.08}
+      ]
+    },
+    "spectra_cnn": {
+      "accuracy": 0.88,
+      "precision": 0.85,
+      "recall": 0.90,
+      "f1_score": 0.87,
+      "confusion_matrix": [[420, 40], [35, 505]],
+      "polymer_types": ["PE", "PP", "PS", "PET", "PVC", "Other"]
+    },
+    "image_classifier": {
+      "accuracy": 0.91,
+      "precision": 0.88,
+      "recall": 0.93,
+      "f1_score": 0.90,
+      "confusion_matrix": [[435, 25], [30, 510]]
+    },
+    "yolov8_detector": {
+      "map_50": 0.87,
+      "map_50_95": 0.72,
+      "counting_mae": 2.3,
+      "precision": 0.89,
+      "recall": 0.85
+    }
+  }
+}
+
