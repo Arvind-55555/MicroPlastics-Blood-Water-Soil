@@ -71,9 +71,9 @@ uvicorn src.api.main:app --reload
 streamlit run dashboard/app.py
 ```
 
-## GitHub Pages Dashboard
+## Dashboard
 
-The dashboard is available at: https://arvind-55555.github.io/MicroPlastics-Blood-Water-Soil
+The dashboard is available at: [MicroPlastics](https://arvind-55555.github.io/MicroPlastics-Blood-Water-Soil)
 
 ## License
 
