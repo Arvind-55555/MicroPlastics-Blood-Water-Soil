@@ -1,0 +1,43 @@
+QUICK FIX: Push Code to GitHub
+
+The repository is now configured to use HTTPS instead of SSH.
+
+TO PUSH NOW:
+
+Option 1: Interactive (Recommended)
+------------------------------------
+Run: bash push_to_github.sh
+
+When prompted for credentials:
+  Username: Arvind-55555
+  Password: [Use Personal Access Token - see below]
+
+Option 2: Manual
+---------------
+git push -u origin main
+
+Then enter:
+  Username: Arvind-55555
+  Password: [Your Personal Access Token]
+
+GENERATE PERSONAL ACCESS TOKEN:
+1. Go to: https://github.com/settings/tokens
+2. Click "Generate new token (classic)"
+3. Name: "MicroPlastics Project"
+4. Select scope: ✅ repo (Full control of private repositories)
+5. Click "Generate token"
+6. COPY THE TOKEN IMMEDIATELY (you won't see it again)
+7. Use this token as your password when pushing
+
+STORE CREDENTIALS (Optional - to avoid entering each time):
+git config --global credential.helper store
+# Then push once, enter credentials, they'll be saved
+
+ALTERNATIVE: Use SSH (if you want to set up new SSH keys)
+----------------------------------------------------------
+1. Generate SSH key: ssh-keygen -t ed25519 -C "your_email@example.com"
+2. Add to GitHub: https://github.com/settings/keys
+3. Switch remote: git remote set-url origin git@github.com:Arvind-55555/MicroPlastics-Blood-Water-Soil.git
+
+See GIT_AUTHENTICATION_GUIDE.md for detailed instructions.
+
